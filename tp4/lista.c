@@ -1,7 +1,7 @@
 // TAD lista de números inteiros
-// Carlos Maziero - DINF/UFPR, Out 2024
-//
-// Implementação do TAD - a completar
+// Aluno Alejandro David Nava Nava
+// GRR: 20242778.
+// Implementação do TAD
 //
 // Implementação com lista encadeada dupla não-circular
 
@@ -175,9 +175,13 @@ int lista_consulta(struct lista_t *l, int *item, int pos){
 	if(l == NULL || item == NULL)
 		return -1;
 	
+
 	/* posição invália, consulta o fim */
-	if(pos > l->tamanho-1 || pos == -1){
-	//	return -1;
+
+	if(pos > l->tamanho-1)
+		return -1;
+
+	if(pos == -1){
 		*item = l->ult->valor;
 		return l->tamanho;
 	}
