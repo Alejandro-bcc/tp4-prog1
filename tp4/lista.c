@@ -113,7 +113,7 @@ int lista_retira(struct lista_t *l, int *item, int pos){
 	int cont;
 
 	/* erro, ponteiros inválidos */
-	if(l == NULL || item == NULL)
+	if(l == NULL || item == NULL || pos >= l->tamanho)
 		return -1;
 
 	/* lista vazia */
@@ -129,7 +129,6 @@ int lista_retira(struct lista_t *l, int *item, int pos){
 		return --l->tamanho;
 	}
 
-
 	/* retira o primeiro elemento */
 	if(pos == 0){
 		aux = l->prim;
@@ -142,7 +141,7 @@ int lista_retira(struct lista_t *l, int *item, int pos){
 	}
 
 	/* retira o ultimo elemento */
-	if(pos >= l->tamanho-1 || pos == -1){
+	if(pos == l->tamanho-1 || pos == -1){
 		aux = l->ult;
 		l->ult = aux->ant;
 		l->ult->prox = NULL;
@@ -172,20 +171,16 @@ int lista_consulta(struct lista_t *l, int *item, int pos){
 	int	cont;
 
 	/* erro, ponteiros inválidos */
-	if(l == NULL || item == NULL)
+	if(l == NULL || item == NULL || pos >= l->tamanho)
 		return -1;
 	
 
 	/* posição invália, consulta o fim */
-
-	if(pos > l->tamanho-1)
-		return -1;
-
 	if(pos == -1){
 		*item = l->ult->valor;
 		return l->tamanho;
-	}
-
+    }
+ 
 	cont = 0;
 	aux = l->prim;
 	while(aux != NULL && cont != pos){
