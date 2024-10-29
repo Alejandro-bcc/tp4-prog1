@@ -27,9 +27,11 @@ struct lista_t * lista_destroi(struct lista_t *l){
 
     struct item_t *aux;
 
+	/* se o ponteiro for nulo não faz nada */
     if(l != NULL){
-        while(l->prim != NULL){
-            aux = l->prim;
+	/* se a lista não for vazia libera todos seus items */
+        while(l->prim != NULL){             
+			aux = l->prim;
             l->prim = aux->prox;
             free(aux);
         }
@@ -72,17 +74,7 @@ int lista_insere(struct lista_t *l, int item, int pos){
         l->prim = novo;
         return ++l->tamanho;
     }
-
-    /* insere na posição do ultimo elememto */
-    if(pos == l->tamanho-1){
-        
-        novo->prox = l->ult;
-        novo->ant = l->ult->ant;
-        l->ult->ant->prox = novo;
-        l->ult->ant = novo;
-        return ++l->tamanho;
-    }
-    
+   
     /* posição inválida, insere no fim  */
     if(pos > l->tamanho-1 || pos == -1){
         
@@ -92,13 +84,15 @@ int lista_insere(struct lista_t *l, int item, int pos){
         l->ult = novo;
         return ++l->tamanho;
     }
-
+	
+	/* resto dos casos */
     cont = 1;
     aux = l->prim->prox;
     while(cont != pos){
         aux = aux->prox;
         cont++;
     }
+
     novo->prox = aux;
 	novo->ant = aux->ant;
     aux->ant->prox = novo;
@@ -112,16 +106,13 @@ int lista_retira(struct lista_t *l, int *item, int pos){
 	struct item_t *aux;
 	int cont;
 
-	/* erro, ponteiros inválidos */
-	if(l == NULL || item == NULL || pos >= l->tamanho)
+	/* erro, ponteiros inválidos ou posição inválida ou lista vazia */
+	if(l == NULL || item == NULL || pos >= l->tamanho || l->prim == NULL)
 		return -1;
-
-	/* lista vazia */
-	if(l->prim == NULL)
-		return l->tamanho;
 
 	/* a lista possui um único elemento */
 	if(l->prim->prox == NULL){
+
 		*item = l->prim->valor;
 		free(l->prim);
 		l->prim = NULL;
@@ -131,6 +122,7 @@ int lista_retira(struct lista_t *l, int *item, int pos){
 
 	/* retira o primeiro elemento */
 	if(pos == 0){
+
 		aux = l->prim;
 		l->prim = aux->prox;
 		l->prim->ant = NULL;
@@ -142,6 +134,7 @@ int lista_retira(struct lista_t *l, int *item, int pos){
 
 	/* retira o ultimo elemento */
 	if(pos == l->tamanho-1 || pos == -1){
+
 		aux = l->ult;
 		l->ult = aux->ant;
 		l->ult->prox = NULL;
@@ -151,12 +144,14 @@ int lista_retira(struct lista_t *l, int *item, int pos){
 		return --l->tamanho;
 	}
 	
+	/* resto dos casos */
 	cont = 1;
 	aux = l->prim->prox;
 	while(cont != pos){
 		aux = aux->prox;
 		cont++;
 	}
+
 	aux->ant->prox = aux->prox;
     aux->prox->ant = aux->ant;
     *item = aux->valor;
@@ -170,11 +165,10 @@ int lista_consulta(struct lista_t *l, int *item, int pos){
 	struct item_t *aux;
 	int	cont;
 
-	/* erro, ponteiros inválidos */
+	/* erro, ponteiros inválidos ou posição inválida */
 	if(l == NULL || item == NULL || pos >= l->tamanho)
 		return -1;
 	
-
 	/* posição invália, consulta o fim */
 	if(pos == -1){
 		*item = l->ult->valor;
@@ -197,13 +191,12 @@ int lista_procura(struct lista_t *l, int valor){
 	struct item_t *aux;
 	int cont;
 
-	/* erro, ponteiro inválido ou lista vazia*/
+	/* erro, ponteiros inválido ou lista vazia*/
 	if(l == NULL || l->prim == NULL)
 		return -1;
 
 	cont = 0;
 	aux = l->prim;
-
 	while(aux != NULL && aux->valor != valor){
 		aux = aux->prox;
 		cont++;
@@ -228,6 +221,8 @@ int lista_tamanho(struct lista_t *l){
 void lista_imprime(struct lista_t *l){
 
 	struct item_t *aux;
+	if(l == NULL)
+		return;
 
 	aux = l->prim;
 	while(aux != NULL){
